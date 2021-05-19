@@ -1,0 +1,30 @@
+#include <vector>
+using namespace std;
+
+int tandemBicycle(vector<int> redShirtSpeeds, vector<int> blueShirtSpeeds,
+                  bool fastest) {
+sort(redShirtSpeeds.begin(), redShirtSpeeds.end());
+sort(blueShirtSpeeds.begin(), blueShirtSpeeds.end());
+int possible_speed = 0, i, j;
+
+if(fastest)
+{
+  i=0, j=blueShirtSpeeds.size()-1;
+  while(i < redShirtSpeeds.size() && j>=0)
+	{
+	  possible_speed += max(redShirtSpeeds[i], blueShirtSpeeds[j]);
+		i++; j--;
+	}
+}
+
+else
+{ 
+  i = redShirtSpeeds.size()-1;
+  while(i>=0)
+	{
+	   possible_speed += max(redShirtSpeeds[i], blueShirtSpeeds[i]);
+		 i--; 
+	}
+}
+	return possible_speed;
+}
