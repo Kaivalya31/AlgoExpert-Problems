@@ -1,0 +1,13 @@
+
+bool isValidSubsequence(vector<int> array, vector<int> sequence) {
+  int seq_idx = 0;
+	for(auto value : array)
+	{
+		if(seq_idx == sequence.size())
+			break;
+		if(sequence[seq_idx] == value)
+			seq_idx++;
+	}
+	
+  return seq_idx == sequence.size();
+}
