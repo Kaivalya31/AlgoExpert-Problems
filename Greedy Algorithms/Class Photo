@@ -1,0 +1,27 @@
+#include <vector>
+using namespace std;
+
+bool classPhotos(vector<int> redShirtHeights, vector<int> blueShirtHeights) {
+  std :: sort(redShirtHeights.begin(), redShirtHeights.end());
+	std :: sort(blueShirtHeights.begin(), blueShirtHeights.end());
+	
+	int i = 0;
+	string shorter_student = redShirtHeights[0] < blueShirtHeights[0] ? 
+	                         "red" : "blue";
+	
+	while(i < redShirtHeights.size())
+	{
+	 if(shorter_student == "red")
+	 {
+	   if(redShirtHeights[i] >= blueShirtHeights[i])
+		 return false;
+	 }
+	 
+	 else if(redShirtHeights[i] <= blueShirtHeights[i])
+	 return false;
+	 
+	 i++;
+	}
+	
+	return true;
+}
