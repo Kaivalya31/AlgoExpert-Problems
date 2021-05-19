@@ -1,0 +1,24 @@
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+string tournamentWinner(vector<vector<string>> competitions,
+                        vector<int> results) {
+  string best_team = "";
+  unordered_map<string, int> scores = {{best_team, 0}};
+	
+	for(int i=0; i<results.size(); i++)
+	{
+	   string match_winner = results[i] == 1? competitions[i][0] : competitions[i][1];
+		 
+		 if(scores.find(match_winner) == scores.end())
+		 scores[match_winner] = 0;
+		 
+		 scores[match_winner] += 3;
+		 
+		 if(scores[match_winner] > scores[best_team])
+		 best_team = match_winner;
+	}
+	
+	return best_team;
+}
