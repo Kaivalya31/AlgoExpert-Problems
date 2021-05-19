@@ -1,0 +1,26 @@
+#include <vector>
+using namespace std;
+
+vector<int> sortedSquaredArray(vector<int> array) {
+  vector<int> sortedSquares(array.size(), 0);
+	int samller_val_idx = 0, larger_val_idx = array.size()-1;
+	
+	for(int i=array.size()-1; i >= 0; i--)
+	{
+		int smaller = array[samller_val_idx], larger = array[larger_val_idx];
+		
+		if(abs(smaller) > abs(larger))
+		{
+			sortedSquares[i] = smaller * smaller;
+			samller_val_idx++;
+		}
+		
+		else
+		{
+			sortedSquares[i] = larger * larger;
+			larger_val_idx--;
+		}
+	}
+	
+	return sortedSquares;
+}
