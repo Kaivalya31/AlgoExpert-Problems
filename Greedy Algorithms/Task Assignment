@@ -1,0 +1,38 @@
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+vector<vector<int>> taskAssignment(int k, vector<int> tasks) {
+  if(tasks.empty() || tasks.size() < 2*k)
+  return {};
+	
+	vector<int> sortedTasks(tasks);
+	std :: sort(sortedTasks.begin(), sortedTasks.end());
+	unordered_map<int, vector<int>> m;
+	
+	for(int i = 0; i < tasks.size(); i++)
+	{
+     if(m.find(tasks[i]) != m.end())
+		   m[tasks[i]].push_back(i);
+		 else
+		 m[tasks[i]] = vector<int>{i};
+  }
+
+	vector<vector<int>> res;
+	
+	for (int i = 0; i<k; i++)
+	{
+      auto t1 = sortedTasks[i], t2 = sortedTasks[tasks.size()-1-i];
+			auto indices_mapped_to_t1 = &m[t1];
+			auto t1_index = indices_mapped_to_t1 -> back();
+			indices_mapped_to_t1 -> pop_back();
+			
+			auto indices_mapped_to_t2 = &m[t2];
+			auto t2_index = indices_mapped_to_t2 -> back();
+			indices_mapped_to_t2 -> pop_back();
+			
+			res.push_back(vector<int>{t1_index, t2_index});
+  }
+	
+	return res;
+}
