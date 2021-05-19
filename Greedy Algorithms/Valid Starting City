@@ -1,0 +1,22 @@
+#include <vector>
+using namespace std;
+
+int validStartingCity(vector<int> distances, vector<int> fuel, int mpg) {
+  int miles_rem = 0, tot_miles_to_go = 0, vc = 0;
+	
+	for(int i=1; i<distances.size(); i++)
+	{
+	   int dist_from_prev_city = distances[i-1];
+		 int fuel_from_prev_city = fuel[i-1];
+		 
+		 miles_rem += fuel_from_prev_city * mpg - dist_from_prev_city;
+		 
+		 if(miles_rem < tot_miles_to_go)
+		 {
+		    tot_miles_to_go = miles_rem;
+				vc = i;
+		 }
+	}
+	
+	return vc;
+}
