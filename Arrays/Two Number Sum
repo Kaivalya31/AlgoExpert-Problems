@@ -1,0 +1,19 @@
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+vector<int> twoNumberSum(vector<int> array, int targetSum) {
+  int n1;
+	for(int n : array)
+	{
+		n1 = targetSum - n;
+		if(n1 == n)
+			continue;
+		else if(std :: find(array.begin(), array.end(), n1) != array.end())
+			return vector<int>{n, n1};
+		else
+			continue;
+	}
+		return {};
+}
