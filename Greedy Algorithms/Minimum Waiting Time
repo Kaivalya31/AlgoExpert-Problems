@@ -1,0 +1,10 @@
+int minimumWaitingTime(vector<int> queries) {
+  std :: sort(queries.begin(), queries.end());
+	int wt = 0, j = queries.size()-1;
+	for(int i=0; i<=j; i++)
+	{
+     wt += queries[i] * (j-i);
+  }
+	
+	return wt;
+}
