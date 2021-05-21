@@ -1,0 +1,31 @@
+#include <vector>
+using namespace std;
+
+vector<int> threeNumberSort(vector<int> array, vector<int> order) {
+  if(array.empty() || order.empty())
+  return array;
+	
+	int n1 = order[0], n2 = order[1];
+	int  I1 = 0, I2 = 0, I3 = array.size()-1;
+	while(I2 <= I3)
+	{
+	   int v = array[I2];
+		 
+		 if(v == n1)
+		 {
+		   std:: swap(array[I1], array[I2]);
+			 I1++; I2++;
+		 }
+		 
+		 else if(v == n2)
+		 I2++;
+		 
+		 else
+		 {
+		   std:: swap(array[I2], array[I3]);
+			 I3--;
+		 }
+	}
+	
+	return array;
+}
