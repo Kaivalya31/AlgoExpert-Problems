@@ -1,0 +1,32 @@
+#include <vector>
+using namespace std;
+int partition(vector<int> &array, int start, int end)
+{
+   int pivot = end;
+	 int i = start-1;
+	for(int j = start; j<end; j++)
+	{
+		if(array[j] < array[pivot])
+		{
+			i++;
+			swap(array[j], array[i]);
+		}
+	}
+	swap(array[i+1], array[pivot]);
+	return i+1;
+}
+
+void helper(vector<int> &array, int start, int end)
+{
+	if(start < end)
+	{
+		int p_idx = partition(array, start, end);
+		helper(array, start, p_idx-1);
+		helper(array, p_idx+1, end);
+	}
+}
+
+vector<int> quickSort(vector<int> array) {
+  helper(array, 0, array.size()-1);
+  return array;
+}
