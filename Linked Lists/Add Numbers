@@ -1,0 +1,37 @@
+using namespace std;
+
+// This is an input struct. Do not edit.
+class LinkedList {
+public:
+  int value;
+  LinkedList *next = nullptr;
+
+  LinkedList(int value) { this->value = value; }
+};
+
+LinkedList *sumOfLinkedLists(LinkedList *linkedListOne,
+                             LinkedList *linkedListTwo) {
+  LinkedList *head, *temp, *n1, *n2, *newnode;
+	head = new LinkedList(0);
+	temp = head;
+	
+	int sum = 0, carry = 0;
+	
+	n1 = linkedListOne;
+	n2 = linkedListTwo;
+	
+	while(n1 != nullptr || n2 != nullptr || carry != 0)
+	{
+	int v1 = n1 != nullptr ? n1 -> value : 0;
+	int v2 = n2 != nullptr ? n2 -> value : 0;
+	sum = v1 + v2 + carry;
+	newnode = new LinkedList(sum % 10);
+	temp -> next = newnode;
+	temp = newnode;
+	carry = sum/10;
+	n1 = n1 != nullptr ? n1 -> next : nullptr;
+	n2 = n2 != nullptr ? n2 -> next : nullptr;
+	}
+
+	return head -> next;
+}
