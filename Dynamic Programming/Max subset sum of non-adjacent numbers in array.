@@ -1,0 +1,41 @@
+#include <vector>
+using namespace std;
+
+int maxSubsetSumNoAdjacent(vector<int> array) {
+ if(array.size() == 0)
+ return 0;
+ if(array.size() == 1)
+ return array[0];
+ int second = array[0];
+ int first = max(array[0], array[1]);
+ 
+ for(int i = 2; i < array.size(); i++)
+ {
+   int current = max(first, second+array[i]);
+	 second = first;
+	 first = current;
+ }
+ return first;
+}
+
+
+//Using auxiliary array, takes O(n) space instead of constant space as above implementation.
+#include <vector>
+using namespace std;
+
+int maxSubsetSumNoAdjacent(vector<int> array) {
+  if(array.size() == 0)
+ return 0;
+ if(array.size() == 1)
+ return array[0];
+	
+ vector<int> max_sums = array;
+ max_sums[1] = max(array[0], array[1]);
+	
+ for(int i=2; i<max_sums.size(); i++)
+ {
+	 max_sums[i] = max(max_sums[i-1], max_sums[i-2]+array[i]);
+ }
+	
+ return max_sums[max_sums.size()-1];
+}
