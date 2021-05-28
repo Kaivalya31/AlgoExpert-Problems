@@ -4,7 +4,7 @@ array. For instance, the integer 2 represents a
 jump of two indices forward in the array; the
 integer -3 represents a jump of three indices
 backward in the array.
-If a jump spills past the array's bounds, it wraps
+If a jump goes past the array's bounds, it wraps
 over to the other side. For instance, a jump of
 -1 at index 0 brings us to the last index in
 the array. Similarly, a jump of 1 at the last
