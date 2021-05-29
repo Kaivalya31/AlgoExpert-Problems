@@ -1,0 +1,116 @@
+Write a function that takes in an array of
+integers and returns an array of length 2
+representing the largest range of integers
+contained in that array.
+The rst number in the output array should be
+the rst number in the range, while the second
+number should be the last number in the
+range.
+A range of numbers is dened as a set of
+numbers that come right after each other in
+the set of real integers. For instance, the
+output array [2, 6] represents the range
+{2, 3, 4, 5, 6} , which is a range of
+length 5. Note that numbers don't need to be
+sorted or adjacent in the input array in order
+to form a range.
+You can assume that there will only be one
+largest range.
+
+
+Solution 1: Using sorting
+#include <vector>
+using namespace std;
+
+vector<int> largestRange(vector<int> array) {
+  if(array.size() == 0)
+  return {};
+  
+	if(array.size() == 1)
+		return {array[0], array[0]};
+	
+	if(array.size() == 2)
+		return {array[0], array[1]};
+	
+	sort(array.begin(), array.end());
+	int start = array[0], end = array[0], max_length = 0;
+	vector<int> res(2, array[0]);
+	
+	for(int i=1; i<array.size(); i++)
+	{
+		if(end == array[i])
+			continue;
+		
+		else if(array[i] - array[i-1] == 1)			
+			end = array[i];
+		
+		else
+		{
+			if((end - start + 1) > max_length)
+			{
+				res[0] = start, res[1] = end;
+				max_length = end - start + 1;
+			}
+			
+			start = end = array[i];
+		}
+	}
+	
+  //If the last element of the array comes in the largest range.
+	if((end - start + 1) > max_length)
+		res[0] = start, res[1] = end;
+	
+	return res;
+}
+
+
+Solution 2: No sorting to reduce time complexity, instead using a map.
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+vector<int> largestRange(vector<int> array) {
+  if(array.size() == 0)
+  return {};
+	
+	if(array.size() == 1)
+		return {array[0], array[0]};
+	
+	if(array.size() == 2)
+		return {array[0], array[1]};
+	
+	int start = array[0], end = array[0], max_range = 0;
+	vector<int> res(2, array[0]);
+	unordered_map<int, bool> m;
+	for(int e : array)
+		m[e] = true;
+	
+	for(int e : array)
+	{	
+		m[e] = false;
+		int cur_range = 1, left = e-1, right = e+1;
+		
+		while(m.find(left) != m.end())
+		{
+			m[left] = false;
+			cur_range++;
+			left--;
+		}
+		
+		while(m.find(right) != m.end())
+		{
+			m[right] = false;
+			cur_range++;
+			right++;
+		}
+		
+		if(cur_range > max_range)
+		{
+			max_range = cur_range;
+			res = {left+1, right-1};
+		}
+	}
+	
+	return res;
+}
+
