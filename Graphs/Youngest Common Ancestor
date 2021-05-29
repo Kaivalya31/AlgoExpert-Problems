@@ -1,0 +1,76 @@
+You're given three inputs, all of which are
+instances of an AncestralTree class that
+have an ancestor property pointing to their
+youngest ancestor. The rst input is the top
+ancestor in an ancestral tree (i.e., the only
+instance that has no ancestor--its ancestor
+property points to None / null ), and the
+other two inputs are descendants in the
+ancestral tree.
+Write a function that returns the youngest
+common ancestor to the two descendants.
+Note that a descendant is considered its own
+ancestor. So in the simple ancestral tree
+below, the youngest common ancestor to
+nodes A and B is node A.
+
+
+#include <vector>
+using namespace std;
+
+class AncestralTree {               
+public:
+  char name;
+  AncestralTree *ancestor;
+
+  AncestralTree(char name) {
+    this->name = name;
+    this->ancestor = NULL;
+  }
+
+  void addAsAncestor(vector<AncestralTree *> descendants);
+};
+
+int getDescendantDepth(AncestralTree *descendant, AncestralTree *topAncestor)
+{
+  int d = 0;
+	while(descendant != topAncestor)
+	{
+	  d++; 
+		descendant = descendant -> ancestor;
+	}
+	
+	return d;
+}
+
+AncestralTree *yca(AncestralTree *Lowerdescendant, 
+                    AncestralTree *Higherdescendant,
+										int depth_diff)
+{
+   while(depth_diff > 0)
+	 {
+	   Lowerdescendant = Lowerdescendant -> ancestor;
+		 depth_diff--;
+	 }
+	 
+	 while(Lowerdescendant != Higherdescendant)
+	 {
+	    Lowerdescendant = Lowerdescendant -> ancestor;
+			Higherdescendant = Higherdescendant -> ancestor;
+	 }
+	 
+	 return Lowerdescendant;
+}
+
+AncestralTree *getYoungestCommonAncestor(AncestralTree *topAncestor,
+                                         AncestralTree *descendantOne,
+                                         AncestralTree *descendantTwo) {
+  int d1 = getDescendantDepth(descendantOne, topAncestor);
+	int d2 = getDescendantDepth(descendantTwo, topAncestor);
+	
+	if(d1 > d2)
+	return yca(descendantOne, descendantTwo, d1-d2);
+	
+	else
+	return yca(descendantTwo, descendantOne, d2-d1);
+}
