@@ -1,0 +1,74 @@
+You're given a list of edges representing an unweighted,
+directed graph with at least one node. Write a function that
+returns a boolean representing whether the given graph
+contains a cycle.
+For the purpose of this question, a cycle is dened as any
+number of vertices, including just one vertex, that are
+connected in a closed chain. A cycle can also be dened as
+a chain of at least one vertex in which the rst vertex is the
+same as the last.
+The given list is what's called an adjacency list, and it
+represents a graph. The number of vertices in the graph is
+equal to the length of edges , where each index i in
+edges contains vertex i 's outbound edges, in no
+particular order. Each individual edge is represented by a
+positive integer that denotes an index (a destination vertex)
+in the list that this vertex is connected to. Note that these
+edges are directed, meaning that you can only travel from a
+particular vertex to its destination, not the other way
+around (unless the destination vertex itself has an
+outbound edge to the original vertex).
+Also note that this graph may contain self-loops. A self-loop
+is an edge that has the same destination and origin; in
+other words, it's an edge that connects a vertex to itself. For
+the purpose of this question, a self-loop is considered a
+cycle.
+For a more detailed explanation, please refer to the
+Conceptual Overview section of this question's video
+explanation.
+
+#include <vector>
+#include <stack>
+using namespace std;
+
+bool is_node_in_cycle(vector<vector<int>>, int, vector<bool>, vector<bool>);
+
+bool cycleInGraph(vector<vector<int>> edges) {
+vector<bool> visited(edges.size(), false);
+vector<bool> currently_in_stack(edges.size(), false);
+
+for(int i=0; i<edges.size(); i++)
+{
+  if(visited[i])
+	continue;
+	
+	bool has_cycle = is_node_in_cycle(edges, i, visited, currently_in_stack);
+	if(has_cycle)
+	  return true;
+}
+
+return false;
+}
+
+bool is_node_in_cycle(vector<vector<int>> edges, int i, 
+                      vector<bool> visited, vector<bool> currently_in_stack)
+{
+  visited[i] = currently_in_stack[i] = true;
+
+	for(auto e: edges[i])
+	{
+	   if(!visited[e])
+		 {
+	   bool has_cycle = is_node_in_cycle(edges, e, visited, currently_in_stack);
+	    if(has_cycle)
+	      return true;
+		 }
+			
+			else if(currently_in_stack[e])
+			  return true;
+	}
+	
+	currently_in_stack[i] = false; 
+	return false;
+}
+
