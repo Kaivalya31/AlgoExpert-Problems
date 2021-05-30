@@ -1,0 +1,58 @@
+Write a function that takes in a string of words
+separated by one or more whitespaces and
+returns a string that has these words in
+reverse order. For example, given the string
+"tim is great" , your function should
+return "great is tim" .
+For this problem, a word can contain special
+characters, punctuation, and numbers. The
+words in the string will be separated by one or
+more whitespaces, and the reversed string
+must contain the same whitespaces as the
+original string. For example, given the string
+"whitespaces 4" you would be
+expected to return "4 whitespaces" .
+Note that you're not allowed to to use any
+built-in split or reverse
+methods/functions. However, you are allowed
+to use a built-in join method/function.
+Also note that the input string isn't guaranteed
+to always contain words.
+
+
+#include<stack>
+using namespace std;
+
+string reverseWordsInString(string str) {
+  if(str.empty())
+  return "";
+  
+	string word = "";
+	stack<string> words_in_str; 
+	int word_start = 0;
+	
+	for(int i=0; i<str.size(); i++)
+	{
+	  if(str[i] != ' ')
+		word += str[i];
+		
+		else
+		{
+		  words_in_str.push(word);
+			word = "";
+		}
+	}
+	
+	words_in_str.push(word);
+	str = "";
+	
+	while(!words_in_str.empty())
+	{
+	  str.append(words_in_str.top() + " ");
+		words_in_str.pop();
+	}
+	
+	//An additional ' ' char is appended at the end, so removing it.
+	str.erase(str.size()-1, 1);
+	return str;
+}
