@@ -1,0 +1,89 @@
+Write a function that takes in an array of
+integers and returns the number of inversions
+in the array. An inversion occurs if for any valid
+indices i and j , i < j and
+array[i] > array[j] .
+For example, given array = [3, 4, 1, 2]
+, there are 4 inversions. The following pairs
+of indices represent inversions:
+[0, 2], [0, 3], [1, 2], [1, 3] .
+Intuitively, the number of inversions is a
+measure of how unsorted the array is.
+
+Solution 1: Using bubble sort algorithm.
+#include <vector>
+using namespace std;
+
+int countInversions(vector<int> array) {
+  if(array.size()==0 || array.size()==1)
+  return 0;
+	
+	int no_of_inv = 0;
+	for(int i=0; i<array.size(); i++)
+	{
+		for(int j=i+1; j<array.size(); j++)
+		{
+			if(array[i] > array[j]) 
+				no_of_inv++;
+		}
+	}
+	
+	return no_of_inv;
+}
+
+Solution 2: Using merge sort to reduce time complexity.
+#include <vector>
+using namespace std;
+int count_subarray_inversions(vector<int> &array, int start, int end);
+int merged_inversions(vector<int> &array, int start, int mid, int end);
+
+int countInversions(vector<int> array) {
+  return count_subarray_inversions(array, 0, array.size());
+}
+
+int count_subarray_inversions(vector<int> &array, int start, int end)
+{
+	if(end-start <= 1)
+		return 0;
+	
+	int mid = (start+end)/2;
+	int left_subarr_inverions = count_subarray_inversions(array, start, mid);
+  int right_subarr_inverions = count_subarray_inversions(array, mid, end);	
+	int inversions_during_merging = merged_inversions(array, start, mid, end);
+	
+	return left_subarr_inverions + right_subarr_inverions + inversions_during_merging ;
+}
+
+
+int merged_inversions(vector<int> &array, int start, int mid, int end)
+{
+	vector<int> sorted;
+	int l = start, r = mid, inversions = 0;
+	
+	while(l < mid && r < end)
+	{
+		if(array[l] <= array[r])
+		{
+			sorted.push_back(array[l]);
+			l++;
+		}
+		
+		else
+		{
+			inversions += mid-l;
+			sorted.push_back(array[r]);
+			r++;
+		}
+	}
+	
+	for(int i=l; i<mid; i++)
+		sorted.push_back(array[i]);
+	
+	for(int i=r; i<end; i++)
+		sorted.push_back(array[i]);
+	
+	for(int i=0; i<sorted.size(); i++)
+		array[start+i] = sorted[i];
+	
+	return inversions;
+}
