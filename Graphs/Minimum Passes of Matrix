@@ -1,0 +1,131 @@
+Write a function that takes in an integer
+matrix of potentially unequal height and
+width and returns the minimum number of
+passes required to convert all negative
+integers in the matrix to positive integers.
+A negative integer in the matrix can only be
+converted to a positive integer if one or
+more of its adjacent elements is positive. An
+adjacent element is an element that is to the
+left, to the right, above, or below the current
+element in the matrix. Converting a negative
+to a positive simply involves multiplying it by
+-1 .
+Note that the 0 value is neither positive
+nor negative, meaning that a 0 can't
+convert an adjacent negative to a positive.
+A single pass through the matrix involves
+converting all the negative integers that can
+be converted at a particular point in time. For example:
+[
+ [0, -2, -1],
+ [-5, 2, 0],
+ [-6, -2, 0],
+]
+After a rst pass, only 3 values can be converted to positives:
+[
+ [0, 2, -1],
+ [5, 2, 0],
+ [-6, 2, 0],
+]
+After a second pass, the remaining negative values can all be converted to
+positives:
+[
+ [0, 2, 1],
+ [5, 2, 0], 
+ [6, 2, 0]
+]
+Note that the input matrix will always contain at least one element. If the
+negative integers in the input matrix can't all be converted to positives,
+regardless of how many passes are run, your function should return -1 .
+
+
+#include <vector>
+using namespace std;
+bool has_negatives(const vector<vector<int>> &matrix);
+vector<vector<int>> get_positions_of_positives(const vector<vector<int>> &matrix);
+vector<vector<int>> get_adjacent_negative_positions(int r, int c, const vector<vector<int>> &matrix);
+int no_of_inversions(vector<vector<int>> &matrix);
+
+int minimumPassesOfMatrix(vector<vector<int>> matrix) {
+int res = no_of_inversions(matrix);
+return !has_negatives(matrix) ? res-1 : -1;
+}
+
+int no_of_inversions(vector<vector<int>> &matrix)
+{
+	vector<vector<int>> queue = get_positions_of_positives(matrix);
+	int passes = 0;
+	
+	while(queue.size() > 0)
+	{
+		int qsize = queue.size();
+		
+		while(qsize > 0)
+		{
+			auto cur_pos = queue.front();
+			queue.erase(queue.begin());
+			int r = cur_pos[0], c = cur_pos[1];
+			
+			vector<vector<int>> adj_negative_positions = get_adjacent_negative_positions(r, c, matrix);
+			for(const auto &pos : adj_negative_positions)
+			{
+				int row = pos[0], col = pos[1];
+				matrix[row][col] *= -1;
+				queue.push_back({row, col});
+			}
+			
+			qsize--;
+		}
+		
+		passes++;
+	}
+	
+	return passes;
+}
+
+vector<vector<int>> get_positions_of_positives(const vector<vector<int>> &matrix)
+{
+	vector<vector<int>> positions_of_positives{};
+	
+	for(int r=0; r<matrix.size(); r++)
+	{
+		for(int c=0; c<matrix[r].size(); c++)
+		{
+			if(matrix[r][c] > 0)
+				positions_of_positives.push_back({r, c});
+		}
+	}
+	
+	return positions_of_positives;
+}
+
+vector<vector<int>> get_adjacent_negative_positions(int r, int c, const vector<vector<int>> &matrix)
+{
+	vector<vector<int>> adj_negative_positions{};
+	
+	if(r>0 && matrix[r-1][c] < 0)
+		adj_negative_positions.push_back({r-1, c});
+	if(r < matrix.size()-1 && matrix[r+1][c] < 0)
+		adj_negative_positions.push_back({r+1, c});
+	if(c > 0 && matrix[r][c-1] < 0)
+		adj_negative_positions.push_back({r, c-1});
+	if(r < matrix[r].size()-1 && matrix[r][c+1] < 0)
+		adj_negative_positions.push_back({r, c+1});
+	
+	return adj_negative_positions;
+}
+
+bool has_negatives(const vector<vector<int>> &matrix)
+{
+	for(const auto &row : matrix)
+	{
+		for(const auto &val : row)
+		{
+			if(val < 0)
+				return true;
+		}
+	}
+	
+	return false;
+}
