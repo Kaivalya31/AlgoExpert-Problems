@@ -16,7 +16,6 @@ each other as in [(]) .
 #include<stack>
 #include<unordered_map>
 using namespace std;
-
 bool balancedBrackets(string str) {
         string opening = "([{";
 	string closing = ")]}";
