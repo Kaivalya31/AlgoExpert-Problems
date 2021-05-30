@@ -1,0 +1,49 @@
+Write a function that takes in an array of nonnegative integers and returns a sorted version
+of that array. Use the Radix Sort algorithm to sort the array.
+
+#include <vector>
+#include <cmath>
+using namespace std;
+
+void counting_sort(vector<int> &array, int digit)
+{
+  vector<int> counts(10, 0);
+	vector<int> temp_sorted_array(array.size(), 0);
+	
+	int nth_digit = pow(10, digit);
+	
+	for(int n : array)
+	{
+	   int count_idx = (n / nth_digit) % 10;
+		 counts[count_idx]++;
+	}
+	
+	for(int i=1; i<10; i++)
+	counts[i] += counts[i-1];
+	
+	for(int i=array.size()-1; i>=0; i--)
+	{
+	   int count_idx = (array[i] / nth_digit) % 10;
+		 counts[count_idx]--;
+		 temp_sorted_array[counts[count_idx]] = array[i];
+	}
+	
+	for(int i=0; i<temp_sorted_array.size(); i++)
+	array[i] = temp_sorted_array[i];
+}
+
+vector<int> radixSort(vector<int> array) {
+ if(array.size() == 0)
+  return {};
+	
+	int max_num = *max_element(array.begin(), array.end());
+	int digit = 0;
+	
+	while(max_num / pow(10, digit) > 0)
+	{
+	   counting_sort(array, digit);
+		 digit++;
+	}
+	
+	return array;
+}
