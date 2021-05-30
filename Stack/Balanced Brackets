@@ -18,10 +18,7 @@ each other as in [(]) .
 using namespace std;
 
 bool balancedBrackets(string str) {
-  if(str.size() % 2 != 0)
-		return false;
-  
-  string opening = "([{";
+        string opening = "([{";
 	string closing = ")]}";
 	unordered_map<char, char> bracket_pairs{{')', '('}, {']', '['}, 
 																					{'}', '{'}};
