@@ -1,0 +1,52 @@
+Write a function that takes in a string made up
+of brackets ( ( , [ , { , ) , ] , and } ) and
+other optional characters. The function should
+return a boolean representing whether the
+string is balanced with regards to brackets.
+A string is said to be balanced if it has as many
+opening brackets of a certain type as it has
+closing brackets of that type and if no bracket is
+unmatched. Note that an opening bracket can't
+match a corresponding closing bracket that
+comes before it, and similarly, a closing bracket
+can't match a corresponding opening bracket
+that comes after it. Also, brackets can't overlap
+each other as in [(]) .
+
+#include<stack>
+#include<unordered_map>
+using namespace std;
+
+bool balancedBrackets(string str) {
+  if(str.size() % 2 != 0)
+		return false;
+  
+  string opening = "([{";
+	string closing = ")]}";
+	unordered_map<char, char> bracket_pairs{{')', '('}, {']', '['}, 
+																					{'}', '{'}};
+	
+	stack<char> s;
+	
+	for(char c: str)
+	{
+		if(opening.find(c) != string::npos)
+			s.push(c);
+		
+		else if(closing.find(c) != string::npos)
+		{
+			if(s.empty())
+				return false;
+		
+			if(s.top() == bracket_pairs[c])
+			s.pop();
+		
+		  else
+			return false;
+		}
+	}
+	
+	return s.empty();
+}
+	
+
