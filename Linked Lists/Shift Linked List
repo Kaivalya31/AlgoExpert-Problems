@@ -1,0 +1,63 @@
+Singly Linked List and an integer k , shifts the
+list in place (i.e., doesn't create a brand new
+list) by k positions, and returns its new head.
+Shifting a Linked List means moving its nodes
+forward or backward and wrapping them
+around the list where appropriate. For
+example, shifting a Linked List forward by one
+position would make its tail become the new
+head of the linked list.
+Whether nodes are moved forward or
+backward is determined by whether k is
+positive or negative.
+Each LinkedList node has an integer
+value as well as a next node pointing to
+the next node in the list or to None / null
+if it's the tail of the list.
+You can assume that the input Linked List will
+always have at least one node; in other words,
+the head will never be None / null .
+
+
+using namespace std;
+
+class LinkedList {
+public:
+  int value;
+  LinkedList *next;
+
+  LinkedList(int value) {
+    this->value = value;
+    next = nullptr;
+  }
+};
+
+LinkedList *shiftLinkedList(LinkedList *head, int k) {
+  if(!head)
+  return nullptr;
+	
+	LinkedList *tail = head;
+	int length = 1;
+	
+	while(tail -> next)
+	{
+		tail = tail -> next;
+		length++;
+	}
+	
+	int offset = abs(k)%length;
+	if(offset == 0)
+		return head;
+	
+	offset = k>0 ? length-offset : offset;
+	LinkedList *new_tail = head;
+	
+	for(int i=0; i<offset-1; i++)
+	new_tail = new_tail -> next;
+	
+  LinkedList *new_head = 	new_tail -> next;
+	new_tail -> next = nullptr;
+	tail -> next = head;
+	
+	return new_head;
+}
