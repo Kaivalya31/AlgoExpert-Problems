@@ -1,0 +1,76 @@
+You're given three inputs, all of which are
+instances of an OrgChart class that have a
+directReports property pointing to their
+direct reports. The first input is the top
+manager in an organizational chart (i.e., the
+only instance that isn't anybody else's direct
+report), and the other two inputs are reports in
+the organizational chart. The two reports are
+guaranteed to be distinct.
+Write a function that returns the lowest
+common manager to the two reports.
+Sample Input
+// From the organizational chart below
+topManager = Node A
+reportOne = Node E
+reportTwo = Node I
+ A
+ / \
+ B C
+ / \ / \
+ D E F G
+ / \
+H   I
+
+Sample Output
+Node B
+
+using namespace std;
+
+class OrgChart {
+public:
+  char name;
+  vector<OrgChart *> directReports;
+
+  OrgChart(char name) {
+    this->name = name;
+    this->directReports = {};
+  }
+
+  void addDirectReports(vector<OrgChart *> directReports);
+};
+
+class helper_class
+{
+	public:
+	OrgChart *lcm;
+	int no_of_relevant_reports;
+};
+
+helper_class helper(OrgChart *manager, OrgChart *reportOne,
+                                 OrgChart *reportTwo)
+{
+	int no_of_relevant_reports  = 0;
+	for(OrgChart *direct_report : manager -> directReports)
+	{
+		helper_class obj = helper(direct_report, reportOne, reportTwo);
+		
+		if(obj.lcm != nullptr)
+			return obj;
+		
+		no_of_relevant_reports += obj.no_of_relevant_reports;
+	}
+	
+	if(manager == reportOne || manager == reportTwo)
+		no_of_relevant_reports++;
+	
+	OrgChart *lcm = no_of_relevant_reports == 2 ? manager : nullptr;
+	helper_class new_obj = {lcm, no_of_relevant_reports};
+	
+	return new_obj;
+}
+
+OrgChart *getLowestCommonManager(OrgChart *topManager, OrgChart *reportOne,
+                                 OrgChart *reportTwo) {
+  return helper(topManager, reportOne, reportTwo).lcm;
+}
