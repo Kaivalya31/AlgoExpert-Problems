@@ -1,0 +1,21 @@
+#include <vector>
+using namespace std;
+
+int BS_Util(vector<int> array, int target, int l, int r)
+{
+	if(l > r)
+		return -1;
+	
+	int mid = (l+r)/2;
+	if(array[mid] == target)
+		return mid;
+	
+	if(array[mid] > target)
+		return BS_Util(array, target, 0, mid-1);
+	
+	else
+		return BS_Util(array, target, mid+1, r);
+}
+int binarySearch(vector<int> array, int target) {
+ return BS_Util(array, target, 0, array.size() - 1);
+}
