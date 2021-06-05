@@ -1,0 +1,51 @@
+Write a function that takes in an array of distinct integers as well as an integer k and that returns the kth smallest integer in that array.
+The function should do this in linear time, on average.
+Sample Input
+array = [8, 5, 2, 9, 7, 6, 3]
+k = 3
+Sample Output
+5
+
+#include <vector>
+using namespace std;
+
+int helper(vector<int> &array, int l, int r, int k)
+{
+	while(1)
+	{
+		if(l > r)
+		{
+			perror("Function should not reach this state!");
+			exit(1);
+		}
+		
+	 int pivot = l, left = l+1, right = r;
+	 while(left <= right)
+	 {
+		 if(array[left] > array[pivot] && array[right] < array[pivot])
+			 swap(array[left], array[right]);
+		 
+		 if(array[left] <= array[pivot])
+			 left++;
+		 
+		 if(array[right] >= array[pivot])
+			 right--;
+	 }
+		
+	swap(array[pivot], array[right]);
+		
+	if(right == k)
+		return array[right];
+		
+	else if(right < k)
+		l = right + 1;
+		
+	else
+		r = right - 1;
+	}
+}
+
+int quickselect(vector<int> array, int k) {
+  return helper(array, 0, array.size()-1, k-1);
+}
+
