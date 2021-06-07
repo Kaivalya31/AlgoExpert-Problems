@@ -1,0 +1,72 @@
+Write a function that takes in an array of words and returns the smallest array of characters needed to form all of the words. The characters
+don't need to be in any particular order. For example, the characters ["y", "r", "o", "u"] are needed to form the words ["your", "you", "or", "yo"] .
+Note: the input words won't contain any spaces; however, they might contain punctuation and/or special characters.
+
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+unordered_map<char, int> count_char_freqs(const string &word);
+void update_max_freqs(const unordered_map<char, int> &char_freqs,
+										 unordered_map<char, int> &max_char_freqs);
+vector<char> make_arr_from_max_char_freqs(const unordered_map<char, int> &max_char_freqs);
+
+vector<char> minimumCharactersForWords(vector<string> words) {
+  if(words.size() == 0)
+  return {};
+	
+  unordered_map<char, int> max_char_freqs;
+	
+	for(auto const &word : words)
+	{
+		auto char_freqs = count_char_freqs(word);
+		update_max_freqs(char_freqs, max_char_freqs);
+	}
+	
+	return make_arr_from_max_char_freqs(max_char_freqs);
+}
+
+
+unordered_map<char, int> count_char_freqs(const string &word)
+{
+	unordered_map<char, int> char_freqs;
+	for(auto c : word)
+	{
+		if(char_freqs.find(c) == char_freqs.end())
+		char_freqs[c] = 0;
+		
+		char_freqs[c]++;
+	}
+	
+	return char_freqs;
+}
+
+
+void update_max_freqs(const unordered_map<char, int> &char_freqs,
+										 unordered_map<char, int> &max_char_freqs)
+{
+	for(const auto &[c, frequency] : char_freqs)
+	{
+		if(max_char_freqs.find(c) != max_char_freqs.end())
+		max_char_freqs[c] = max(max_char_freqs[c], frequency);
+		
+		else
+			max_char_freqs[c] = frequency;
+	}
+}
+
+
+vector<char> make_arr_from_max_char_freqs(const unordered_map<char, int> &max_char_freqs)
+{
+	vector<char> chars;
+	
+	for(const auto &[c, frequency] : max_char_freqs)
+	{
+		for(int i=0; i<frequency; i++)
+			chars.push_back(c);
+	}
+	
+	return chars;
+}
+
+
