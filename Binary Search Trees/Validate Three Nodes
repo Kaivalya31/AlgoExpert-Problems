@@ -1,0 +1,57 @@
+You're given three nodes that are contained in the same Binary Search Tree: nodeOne, nodeTwo, and nodeThree . Write a function that returns a boolean representing whether
+one of nodeOne or nodeThree is an ancestor of nodeTwo and the other node is a descendant of nodeTwo . For example, if your function determines that nodeOne is an
+ancestor of nodeTwo , then it needs to see if nodeThree is a descendant of nodeTwo . If your function determines that nodeThree is an ancestor, then it needs to see if nodeOne
+is a descendant. A descendant of a node N is defined as a node contained in the tree rooted at N . A node N is an ancestor of another node M if M is a descendant of N .
+It isn't guaranteed that nodeOne or nodeThree will be ancestors or descendants of nodeTwo , but it is guaranteed that all three nodes will be unique and will never be
+None / null . In other words, you'll be given valid input nodes. 
+Sample Input:
+tree = 
+  5
+ / \
+ 2 7
+ / \ / \
+ 1 4 6 8
+ / /
+ 0 3
+// This tree won't actually be passed
+nodeOne = 5 // The actual node with v
+nodeTwo = 2 // The actual node with v
+nodeThree = 3 // The actual node with
+
+Sample Output:
+true // nodeOne is an ancestor of nodeTwo and nodeThree is a descendant of nodeTwo.
+
+
+using namespace std;
+
+// This is an input class. Do not edit.
+class BST {
+public:
+  int value;
+  BST *left = nullptr;
+  BST *right = nullptr;
+
+  BST(int value) { this->value = value; }
+};
+
+bool is_descendant(BST *parent, BST *child)
+{
+	if(!parent)
+		return false;
+	
+	if(parent == child)
+		return true;
+	
+	return child -> value > parent -> value ? is_descendant(parent -> right, child):
+	                                          is_descendant(parent -> left, child);
+}
+
+bool validateThreeNodes(BST *nodeOne, BST *nodeTwo, BST *nodeThree) {
+  if(is_descendant(nodeTwo, nodeOne))
+		return is_descendant(nodeThree, nodeTwo);
+	
+	if(is_descendant(nodeTwo, nodeThree))
+		return is_descendant(nodeOne, nodeTwo);
+	
+  return false;
+}
