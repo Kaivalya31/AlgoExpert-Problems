@@ -1,0 +1,32 @@
+Check if the given tree satisfies the BST property.
+
+O(n) time | O(d) space:
+
+class BST {
+public:
+  int value;
+  BST *left;
+  BST *right;
+
+  BST(int val);
+  BST &insert(int val);
+};
+
+bool helper(BST *tree, int min, int max)
+{
+  if((tree -> value) < min || (tree -> value) >= max)	
+		return false;
+	if(tree -> left && !helper(tree -> left, min, tree -> value))
+		return false;
+	if(tree -> right && !helper(tree -> right, tree -> value, max))
+		return false;
+	
+	return true;
+}
+
+bool validateBst(BST *tree) {
+  if(!tree)
+		return true;
+	
+	return helper(tree, INT_MIN, INT_MAX);
+}
