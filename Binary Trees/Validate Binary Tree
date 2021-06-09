@@ -1,0 +1,71 @@
+You have n binary tree nodes numbered from 0 to n - 1 where node i has two children leftChild[i] and rightChild[i], return true if and only if all the given nodes
+form exactly one valid binary tree. If node i has no left child then leftChild[i] will equal -1, similarly for the right child.Note that the nodes have no values 
+and that we only use the node numbers in this problem.
+
+class Solution {
+public:
+    bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) {
+        vector<int> nodes_present(n, 0);
+        
+        for(int i=0; i<n; i++)
+        {
+            if(leftChild[i] >= 0)
+                nodes_present[leftChild[i]]++;
+            
+            if(rightChild[i] >= 0)
+                nodes_present[rightChild[i]]++;
+        }
+        
+        int root = -1;
+        
+        //Checking if there's a root node in the tree.
+        for(int i=0; i<n; i++)
+        {
+            if(nodes_present[i] == 0)
+            {
+                root = i;
+                break;
+            }
+        }
+        //Return false if root not present.
+        if(root == -1)
+            return false;
+        
+        
+        //Check if we perform BFS covering all n nodes starting at the root we just found.
+        queue<int> q;
+        vector<int> visited(n, 0);
+        int nodes_processed = 0;
+        q.push(root);
+        visited[root] = true;
+        
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            
+            if(leftChild[node] != -1)
+            {
+                if(visited[leftChild[node]])
+                    return false;
+                
+                q.push(leftChild[node]);
+                visited[node] = true;
+                nodes_processed++;
+            }
+            
+            if(rightChild[node] != -1)
+            {
+                if(visited[rightChild[node]])
+                    return false;
+                
+                q.push(rightChild[node]);
+                visited[node] = true;
+                nodes_processed++;
+            }
+        }
+        
+        //Return whether the BFS traversal covered all the n nodes starting at the root we found earlier.
+        return nodes_processed == n-1;
+    }
+};
