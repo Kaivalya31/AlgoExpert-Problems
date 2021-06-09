@@ -1,0 +1,49 @@
+Write a function that takes in a Binary Tree and inverts it. In other words, the function should swap every left node in the tree for its corresponding right node.
+Each BinaryTree node has an integer value , a left child node, and a right child node. Children nodes can either be BinaryTree nodes themselves or None/null .
+
+#include <vector>
+#include <deque>
+using namespace std;
+
+class BinaryTree {
+public:
+  int value;
+  BinaryTree *left;
+  BinaryTree *right;
+
+  BinaryTree(int value);
+  void insert(vector<int> values, int i = 0);
+  void invertedInsert(vector<int> values, int i = 0);
+};
+
+Solution 1: Using queue.
+void invertBinaryTree(BinaryTree *tree) {
+  queue<BinaryTree *> q;
+	q.push(tree);
+	
+	while(!q.empty())
+	{
+		BinaryTree *node = q.front();
+		q.pop();
+		
+		if(!node)
+			continue;
+		
+		swap(node -> left, node -> right);
+		q.push(node -> left);
+		q.push(node -> right);
+	}
+	
+	return;
+}
+
+
+Solution 1: Using recursion
+void invertBinaryTree(BinaryTree *tree) {
+ if(!root)
+	return;
+  
+ swap(tree -> left, tree -> right);
+ invertBinaryTree(tree -> left);
+ invertBinaryTree(tree -> right);
+}
