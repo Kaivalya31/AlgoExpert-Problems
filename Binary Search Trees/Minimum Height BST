@@ -1,0 +1,58 @@
+Write a function that takes in a non-empty sorted array of distinct integers, constructs a BST from the integers, and returns the root of the BST. The function should minimize
+the height of the BST. You've been provided with a BST class that you'll have to use to construct the BST. Each BST node has an integer value , a left child node, and a right
+child node. A node is said to be a valid BST node if and only if it satisfies the BST property: its value is strictly greater than the values of every node to its left; 
+its value is less than or equal to the values of every node to its right; and its children nodes are either valid BST nodes themselves or None / null . A BST is valid if and 
+only if all of its nodes are valid BST nodes. Note that the BST class already has an insert method which you can use if you want.
+
+using namespace std;
+
+class BST {
+public:
+  int value;
+  BST *left;
+  BST *right;
+
+  BST(int value) {
+    this->value = value;
+    left = NULL;
+    right = NULL;
+  }
+
+  void insert(int value) {
+    if (value < this->value) {
+      if (left == NULL) {
+        left = new BST(value);
+      } else {
+        left->insert(value);
+      }
+    } else {
+      if (right == NULL) {
+        right = new BST(value);
+      } else {
+        right->insert(value);
+      }
+    }
+  }
+};
+
+BST *construct_min_height_bst(vector<int> array, int l, int r)
+{
+  if(l > r)
+	return NULL;
+	
+	int mid = (l+r)/2;
+	BST *root = new BST(array[mid]);
+	
+	root -> left = construct_min_height_bst(array, l, mid-1);  
+	root -> right = construct_min_height_bst(array, mid+1, r);
+	
+	return root;
+}
+
+BST *minHeightBst(vector<int> array) {
+  if(array.size() == 0)
+	return NULL;
+	else
+  return construct_min_height_bst(array, 0, array.size()-1);
+}
+
