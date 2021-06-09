@@ -1,0 +1,33 @@
+Find succesor of a given node as per the inorder traversal of the given BST.
+
+Node *min_value_node(Node *node)
+  {
+      while(node -> left)
+      node = node -> left;
+      
+      return node;
+  }
+  
+  Node *inOrderSuccessor(Node *root, Node *x)
+    {
+        Node *res = nullptr;
+        
+        while(root && root != x)
+        {
+            if(x -> data < root -> data)
+            {
+                res = root;
+                root = root -> left;
+            }
+            
+            else 
+            root = root -> right;
+        }
+        if(!root)
+        return nullptr;
+        
+        if(!root -> right)
+        return res;
+        
+        return min_value_node(root -> right);
+    }
