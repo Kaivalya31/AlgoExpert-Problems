@@ -1,0 +1,43 @@
+Write a function that takes in a sorted array of distinct integers as well as a target integer.The caveat is that the integers in the array have been shifted by some amount.
+In other words, they've been moved to the left or to the right by one or more positions. For example, [1, 2, 3, 4] might have turned into [3, 4, 1, 2] .The function should 
+use a variation of the Binary Search algorithm to determine if the target integer is contained in the array and should return its index if it is, otherwise -1.
+Sample Input
+[45, 61, 71, 72, 73, 0, 1, 21, 33, 37]
+33
+Sample Output
+8
+
+O(logn) time | O(1) space
+#include <vector>
+using namespace std;
+
+int shiftedBinarySearch(vector<int> array, int target) {
+  int l = 0, r = array.size()-1;
+	while(l <= r)
+	{
+		int mid = (l+r)/2;
+		int mid_num = array[mid], l_num = array[l], r_num = array[r];
+		if(target == mid_num)
+			return mid;
+		
+		if(l_num <= mid_num) //i.e left subarray is sorted
+		{
+			if(target < mid_num && target >= l_num)
+				r = mid - 1;
+			
+			else
+				l = mid + 1;
+		}
+		
+		else //i.e right subarray is sorted
+		{
+			if(target > mid_num && target <= r_num)
+				l = mid + 1;
+			
+			else
+				r = mid - 1;
+		}
+	}
+	
+	return -1;
+}
