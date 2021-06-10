@@ -21,6 +21,7 @@ Hints
 // Summing all of these depths yields 
 
 
+Solution 1:
 using namespace std;
 
 class BinaryTree {
@@ -41,3 +42,50 @@ int nodeDepths(BinaryTree *root, int d = 0) {
   return 0;
 	return d + nodeDepths(root -> left, d+1) + nodeDepths(root -> right, d+1);
 }
+
+
+Solution 2:
+#include <stack>
+using namespace std;
+
+class BinaryTree {
+public:
+  int value;
+  BinaryTree *left;
+  BinaryTree *right;
+
+  BinaryTree(int value) {
+    this->value = value;
+    left = nullptr;
+    right = nullptr;
+  }
+};
+
+struct level
+{
+  BinaryTree *node;
+	int depth;
+};
+
+int nodeDepths(BinaryTree *root) {
+  int sum_of_depths = 0;
+	
+	stack<level> s;
+	s.push({root, 0});
+	
+	while(!s.empty())
+	{
+		level n = s.top();
+		s.pop();
+		
+		if(!(n.node))
+			continue;
+	
+		sum_of_depths += n.depth;
+		s.push({(n.node) -> left, n.depth+1});
+		s.push({(n.node) -> right, n.depth+1});
+	}
+	
+	return sum_of_depths;
+}
+
