@@ -1,0 +1,60 @@
+Write a SuffixTrie class for a Suffix-Trielike data structure. The class should have a root property set to be the root node of the trie and should support:
+Creating the trie from a string; this will be done by calling the populateSuffixTrieFrom method upon class instantiation, which should populate the root of the class.
+Searching for strings in the trie. Note that every string added to the trie should end with the special endSymbol character: "*" . 
+
+
+#include <unordered_map>
+using namespace std;
+
+// Do not edit the class below except for the
+// populateSuffixTrieFrom and contains methods.
+// Feel free to add new properties and methods
+// to the class.
+class TrieNode {
+public:
+  unordered_map<char, TrieNode *> children;
+};
+
+class SuffixTrie {
+public:
+  TrieNode *root;
+  char endSymbol;
+
+  SuffixTrie(string str) {
+    this->root = new TrieNode();
+    this->endSymbol = '*';
+    this->populateSuffixTrieFrom(str);
+  }
+
+  void populateSuffixTrieFrom(string str) {
+    for(int i=0; i<str.size(); i++)
+		{
+			TrieNode *n = this -> root;
+			for(int j=i; j<str.size(); j++)
+			{
+				char letter = str[j];
+				if(n -> children.find(letter) == n -> children.end())
+					n -> children[letter] = new TrieNode();
+				
+				n = n -> children[letter];
+			}
+			
+			n -> children[this -> endSymbol] = nullptr;
+		}
+		
+		return;
+  }
+
+  bool contains(string str) {
+    TrieNode *n = this -> root;
+		for(char letter : str)
+		{
+			if(n -> children.find(letter) == n -> children.end())
+      return false;
+			
+			n = n -> children[letter];
+		}
+		
+		return n -> children.find(this -> endSymbol) != n -> children.end();
+  }
+};
