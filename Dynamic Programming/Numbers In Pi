@@ -1,0 +1,65 @@
+Given a string representation of the first n digits of Pi and a list of positive integers (all in string format), write a function that returns the smallest number of spaces 
+that can be added to the n digits of Pi such that all resulting numbers are found in the list of integers. Note that a single number can appear multiple times in the resulting 
+numbers. For example, if Pi is "3141" and the numbers are ["1", "3", "4"] , the number "1" is allowed to appear twice in the list of resulting numbers after three spaces are 
+added: "3 | 1 | 4 | 1" . If no number of spaces to be added exists such that all resulting numbers are found in the list of integers, the function should return -1 .
+Sample Input
+pi = "3141592653589793238462643383279",
+numbers = ["314159265358979323846", "26433", "8", "3279", "314159265", "35897932384626433832", "79"]
+Sample Output
+2 // "314159265 | 35897932384626433832 | 79"
+
+#include <vector>
+#include <set>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+int get_min_spaces(string pi, set<string> numbers_table, 
+									unordered_map<int, int> &cache, int idx);
+
+int numbersInPi(string pi, vector<string> numbers) {
+  if(find(numbers.begin(), numbers.end(), pi) != numbers.end())
+  return 0;
+	
+	set<string> numbers_table;
+	for(string s : numbers)
+		numbers_table.insert(s);
+	
+	unordered_map<int, int> cache;
+	
+	int min_spaces = get_min_spaces(pi, numbers_table, cache, 0);
+	return min_spaces == INT_MAX? -1 : min_spaces;
+}
+
+
+int get_min_spaces(string pi, set<string> numbers_table, 
+									unordered_map<int, int> &cache, int idx)
+{
+	if(idx == pi.length())
+		return -1;
+	
+	if(cache.find(idx) != cache.end())
+		return cache[idx];
+	
+	int min_spaces = INT_MAX;
+	for(int i=idx; i<pi.length(); i++)
+	{
+		string prefix = pi.substr(idx, i+1-idx);
+		if(numbers_table.find(prefix) != numbers_table.end())
+		{
+			int min_spaces_in_suffix = get_min_spaces(pi, numbers_table,
+																								cache, i+1);
+			
+			//When prefix is just the first digit in pi
+			//i.e. the starting or the very first scenario.
+			if(min_spaces_in_suffix == INT_MAX)
+				min_spaces = min(min_spaces, min_spaces_in_suffix);
+			else
+				min_spaces = min(min_spaces, min_spaces_in_suffix + 1);
+		}
+	}
+	
+	cache.insert({idx, min_spaces});
+	return cache[idx];
+}
