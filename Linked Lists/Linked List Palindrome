@@ -1,0 +1,55 @@
+Write a function that takes in the head of a Singly Linked List and returns a boolean representing whether the linked list's nodes form a palindrome. Your function shouldn't
+make use of any auxiliary data structure. A palindrome is usually defined as a string that's written the same forward and backward. For a linked list's nodes to form a 
+palindrome, their values must be the same when read from left to right and from right to left. Note that single-character strings are palindromes, which means that single-node 
+linked lists form palindromes. Each LinkedList node has an integer value as well as a next node pointing to the next node in the list or to None / null if it's the tail of the 
+list. You can assume that the input linked list will always have at least one node; in other words, the head will never be None / null .
+Sample Input
+head = 0 -> 1 -> 2 -> 2 -> 1 -> 0
+Sample Output
+true
+
+using namespace std;
+
+// This is an input struct. Do not edit.
+class LinkedList {
+public:
+  int value;
+  LinkedList *next;
+
+  LinkedList(int value) {
+    this->value = value;
+    this->next = nullptr;
+  }
+};
+
+bool linkedListPalindrome(LinkedList *head) {
+  if(!head)
+  return true;
+	
+	LinkedList *slow_node = head, *fast_node = head;
+	while(fast_node && fast_node -> next)
+	{
+		slow_node = slow_node -> next;
+		fast_node = fast_node -> next -> next;
+	}
+	
+	//reversing second half of linked list
+	LinkedList *cur = slow_node, *prev = nullptr, *next;
+	while(cur)
+	{
+		next = cur -> next;
+		cur -> next = prev;
+		prev = cur;
+		cur = next;
+	}
+	
+	//matching first half and reversed second half of the linked list
+	while(head && prev)
+	{
+		if(head -> value != prev -> value)
+			return false;
+		head = head -> next, prev = prev -> next;
+	}
+	
+	return true;
+}
