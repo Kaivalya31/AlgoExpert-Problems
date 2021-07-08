@@ -1,0 +1,80 @@
+You're given the head of a Singly Linked List of arbitrary length k . Write a function that zips the Linked List in place (i.e., doesn't create a brand new list) and returns 
+its head. A Linked List is zipped if its nodes are in the following order, where k is the length of the Linked List:
+1st node -> kth node -> 2nd node -> (k-1)th node -> 3rd node...
+Each LinkedList node has an integer value as well as a next node pointing to the next node in the list or to None / null if it's the tail of the list. You can assume that the 
+input Linked List will always have at least one node; in other words, the head will never be None / null .
+Sample Input
+linkedList = 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Sample Output
+1 -> 6 -> 2 -> 5 -> 3 -> 4
+
+
+using namespace std;
+
+// This is an input struct. Do not edit.
+class LinkedList {
+public:
+  int value;
+  LinkedList *next = nullptr;
+
+  LinkedList(int value) { this->value = value; }
+};
+
+LinkedList *split_linked_list(LinkedList *linkedList);
+LinkedList *interweave_linked_list(LinkedList *first_half_head, LinkedList *second_half_head);
+LinkedList *reverse_list(LinkedList *second_half_head);
+
+LinkedList *zipLinkedList(LinkedList *linkedList) {
+  if(!(linkedList -> next) || !(linkedList -> next -> next))
+  return linkedList;
+	
+	LinkedList *first_half_head = linkedList, 
+	*second_half_head = split_linked_list(linkedList);
+	
+	second_half_head = reverse_list(second_half_head);
+	return interweave_linked_list(first_half_head, second_half_head);
+}
+
+LinkedList *split_linked_list(LinkedList *linkedList)
+{
+	LinkedList *slow = linkedList, *fast = linkedList;
+	while(fast && fast -> next)
+	{
+		slow = slow -> next;
+		fast = fast -> next -> next;
+	}
+	
+	LinkedList *second_half_head = slow -> next;
+	slow -> next = NULL;
+	return second_half_head;
+}
+
+LinkedList *reverse_list(LinkedList *second_half_head)
+{
+	LinkedList *cur = second_half_head, *prev = NULL, *cur_next;
+	while(cur)
+	{
+		cur_next = cur -> next;
+		cur -> next = prev;
+		prev = cur;
+		cur = cur_next;
+	}
+	
+	return prev;
+}
+
+LinkedList *interweave_linked_list(LinkedList *first_half_head, LinkedList *second_half_head)
+{
+	LinkedList *t1 = first_half_head, *t2 = second_half_head;
+	while(t1 && t2)
+	{
+		LinkedList *next1 = t1 -> next, *next2 = t2 -> next;
+		
+		t1 -> next = t2;
+		t2 -> next = next1;
+		
+		t1 = next1, t2 = next2;
+	}
+	
+	return first_half_head;
+}
