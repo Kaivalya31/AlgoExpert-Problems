@@ -1,0 +1,68 @@
+Write a function that takes in a Binary Tree, flattens it, and returns its leftmost node. A flattened Binary Tree is a structure that's nearly identical to a Doubly Linked List 
+(except that nodes have left and right pointers instead of prev and next pointers), where nodes follow the original tree's left-to-right order. Note that if the input Binary Tree
+happens to be a valid Binary Search Tree, the nodes in the flattened tree will be sorted. The flattening should be done in place, meaning that the original data structure should 
+be mutated (no new structure should be created). Each BinaryTree node has an integer value , a left child node, and a right child node. Children nodes can either be BinaryTree 
+nodes themselves or None / null .
+Sample Input
+tree = 1
+ / \
+ 2 3
+ / \ /
+ 4 5 6
+ / \
+ 7 8
+Sample Output
+4 <-> 2 <-> 7 <-> 5 <-> 8 <-> 1 <-> 6
+ 
+ 
+ #include <vector>
+using namespace std;
+
+// This is the class of the input root. Do not edit it.
+class BinaryTree {
+public:
+  int value;
+  BinaryTree *left = nullptr;
+  BinaryTree *right = nullptr;
+
+  BinaryTree(int value);
+};
+
+void connect_nodes(BinaryTree *left_node, BinaryTree *right_node)
+{
+	left_node -> right = right_node;
+	right_node -> left = left_node;
+	return;
+}
+
+vector<BinaryTree *> helper(BinaryTree *root)
+{
+	if(!root)
+		return {nullptr, nullptr};
+	
+	BinaryTree *leftmost, *rightmost;
+	
+	if(!root -> left)
+		leftmost = root;
+	else
+	{
+		vector<BinaryTree *> res = helper(root -> left);
+		connect_nodes(res[1], root);
+		leftmost = res[0];
+	}
+	
+	if(!root -> right)
+		rightmost = root;
+	else
+	{
+		vector<BinaryTree *> res = helper(root -> right);
+		connect_nodes(root, res[0]);
+		rightmost = res[1];
+	}
+	
+	return {leftmost, rightmost};
+}
+
+BinaryTree *flattenBinaryTree(BinaryTree *root) {
+  return helper(root)[0];
+}
