@@ -1,0 +1,61 @@
+You're given the root node of a Binary Tree. Write a function that returns true if this Binary Tree is height balanced and false if it isn't. A Binary Tree is height balanced 
+if for each node in the tree, the difference between the height of its left subtree and the height of its right subtree is at most 1 . Each BinaryTree node has an integer value,
+a left child node, and a right child node. Children nodes can either be BinaryTree nodes themselves or None / null .
+
+Sample Input
+tree = 
+  1
+ / \
+2   3
+/\  \
+4 5  6
+ / \
+7   8
+Sample Output
+true
+
+Solution:
+using namespace std;
+
+// This is an input class. Do not edit.
+class BinaryTree {
+public:
+  int value;
+  BinaryTree *left = nullptr;
+  BinaryTree *right = nullptr;
+
+  BinaryTree(int value) { this->value = value; }
+};
+
+class TreeInfo
+{
+public:
+bool is_balanced;
+int height;
+
+TreeInfo(bool is_balanced, int height)
+{
+   this -> is_balanced = is_balanced;
+	 this -> height = height;
+}
+};
+
+TreeInfo get_tree_info(BinaryTree *tree)
+{
+  if(!tree)
+	return TreeInfo(true, -1);
+	
+	TreeInfo left_sub_tree_info = get_tree_info(tree -> left);
+	TreeInfo right_sub_tree_info = get_tree_info(tree -> right);
+	
+	bool is_balanced = left_sub_tree_info.is_balanced && right_sub_tree_info.is_balanced
+	                   && abs(left_sub_tree_info.height - right_sub_tree_info.height) <= 1;
+						
+	int h = max(left_sub_tree_info.height, right_sub_tree_info.height) + 1;		
+	
+	return TreeInfo(is_balanced, h);
+}
+
+bool heightBalancedBinaryTree(BinaryTree *tree) {
+	return get_tree_info(tree).is_balanced;
+}
